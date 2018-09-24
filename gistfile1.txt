@@ -1,0 +1,238 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'test2.ui'
+#
+# Created by: PyQt4 UI code generator 4.11.4
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt4 import QtCore, QtGui
+total_result = ""
+filename = ""
+
+import StringIO, urllib2, urllib, re, sys, ctypes, getpass
+reload(sys)
+sys.setdefaultencoding('cp949')
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName(_fromUtf8("Form"))
+        Form.resize(532, 313)
+        Form.setMinimumSize(QtCore.QSize(532, 313))
+        Form.setMaximumSize(QtCore.QSize(532, 313))
+        self.label_2 = QtGui.QLabel(Form)
+        self.label_2.setGeometry(QtCore.QRect(10, 10, 531, 16))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("CentSchbook BT"))
+        font.setPointSize(18)
+        font.setBold(False)
+        font.setItalic(True)
+        font.setWeight(50)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.plainTextEdit = QtGui.QPlainTextEdit(Form)
+        self.plainTextEdit.setGeometry(QtCore.QRect(10, 30, 511, 251))
+        self.plainTextEdit.setCursorWidth(1)
+        self.plainTextEdit.setObjectName(_fromUtf8("plainTextEdit"))
+        self.buttonBox = QtGui.QDialogButtonBox(Form)
+        self.buttonBox.setGeometry(QtCore.QRect(360, 280, 161, 31))
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+        self.buttonBox.setCenterButtons(False)
+        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
+        self.label_3 = QtGui.QLabel(Form)
+        self.label_3.setGeometry(QtCore.QRect(10, 290, 341, 16))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Agency FB"))
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.madeby_2 = QtGui.QLabel(Form)
+        self.madeby_2.setGeometry(QtCore.QRect(340, 10, 61, 21))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("CentSchbook BT"))
+        font.setPointSize(12)
+        font.setItalic(True)
+        self.madeby_2.setFont(font)
+        self.madeby_2.setObjectName(_fromUtf8("madeby_2"))
+        self.madeby_3 = QtGui.QLabel(Form)
+        self.madeby_3.setGeometry(QtCore.QRect(400, 10, 121, 21))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("CentSchbook BT"))
+        font.setPointSize(12)
+        font.setItalic(True)
+        self.madeby_3.setFont(font)
+        self.madeby_3.setObjectName(_fromUtf8("madeby_3"))
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), Form.close)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), Form.close)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), self.text_input)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), self.Form2show)
+
+
+    def Form2show(self):
+        Form2.show()
+
+
+    def retranslateUi(self, Form):
+        Form.setWindowTitle(_translate("Form", "Domain Search (Version 1.1)", None))
+        self.label_2.setText(_translate("Form", "https://sitereview.bluecoat.com", None))
+        self.label_3.setText(_translate("Form", "※ 한 줄에 한개의 도메인만 조회가 가능합니다.", None))
+##        self.plainTextEdit.setPlainText(_translate("Form", "테스트결과", None))
+
+    def text_input(self):
+        global filename
+        self.plainTextEdit.setOverwriteMode(True)
+        self.plainTextEdit.toPlainText()
+##        user_readtext = ""
+        user_readtext = self.plainTextEdit.toPlainText()
+        getusername =  getpass.getuser()
+
+        f = StringIO.StringIO(str(user_readtext))
+        filename = "C:\Users" + '\\' + getusername + '\\' + "Desktop\Domain_Result.txt"
+
+        f2 = open(filename,"wb")
+
+        name = u"요청" + ',' +  ',' +  ',' +  ',' + u"도메인조회결과" + '\n'
+        f2.write(name)
+        line = f.readline()
+
+        while 1:
+            global total_result
+
+
+            urldata1 = '{"url":'
+            realurl = line
+            realurl = realurl.replace("\n", '')
+            realurl2 = '"' + realurl + '"'
+            urldata2 = ","
+            urldata3 = '"captcha":""}'
+
+            finaldata = urldata1 + realurl2 + urldata2 + urldata3
+
+            report_realurl = realurl + ',' + ',' + ',' + ','
+            f2.write(report_realurl)
+
+        ##data = '{"url":"www.naver.com","captcha":""}'
+            user_agent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+            request = urllib2.Request('http://sitereview.bluecoat.com/resource/lookup', finaldata, {'Content-Type': 'application/json'})
+            request.add_header("User-agent", user_agent) ##헤더 추가
+        
+            try:
+                response = urllib2.urlopen(request)
+            except:
+                errormessange = u"도메인 조회중 오류 발생"
+        
+                f2.write(errormessange)
+                break
+            result = str(response.read())
+
+            d = '<categorization><num>40</num><name>'
+
+            for iterate in re.finditer(d, result):
+                a = iterate.end()
+                print "haha"
+
+                print result[a:752]
+
+                c = a
+                b = ''
+
+
+
+                x = 0
+                y = 7
+
+                while result[a+x:a+y] != '</name>' :
+                    x = x+1
+                    y = y+1
+
+                print "sdfklajslkfjsdklfjkl"
+
+
+                b = result[a:a+x]
+                print b
+
+
+            line = f.readline()
+
+        ##self.treeWidget_2.topLevelItem(0).setText(0, _translate("MainWindow", "URL1", None))  // treewidget_2 가 요청 URL, treewidget 이 결과
+            if not line:
+                total_result = total_result + b
+        ##          self.treeWidget_2.topLevelItem(0).setText(0, _translate("MainWindow", b, None))
+                f2.write(b)
+                break
+            else :
+                b = b + "\n"
+                total_result = total_result + b
+                f2.write(b)
+
+        f.close()
+        f2.close()
+
+
+## 확인버튼 UI##
+class Ui_Form2(object):
+    def setupUi(self, Form):
+        Form.setObjectName(_fromUtf8("Form"))
+        Form.resize(327, 86)
+        self.pushButton = QtGui.QPushButton(Form)
+        self.pushButton.setGeometry(QtCore.QRect(110, 50, 101, 31))
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.label_2 = QtGui.QLabel(Form)
+        self.label_2.setGeometry(QtCore.QRect(10, 10, 311, 41))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("CentSchbook BT"))
+        font.setPointSize(18)
+        font.setBold(False)
+        font.setItalic(True)
+        font.setWeight(50)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.close) ## 확인버튼 누르면 창이닫힘
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.startcsv) ## startcsv 함수 호출
+
+
+    def startcsv(self):
+        ctypes.windll.shell32.ShellExecuteA(0, 'open', filename, None, None, 1) ## 독립적으로 프로세스 실행(파이선에 묶여있지 않게되며, 실행이 빨라짐)
+
+
+
+    def retranslateUi(self, Form):
+        Form.setWindowTitle(_translate("Form", "Complete", None))
+        self.pushButton.setText(_translate("Form", "확인", None))
+        self.label_2.setText(_translate("Form", "CSV File Creation Complete", None))
+
+
+if __name__ == "__main__":
+
+    app = QtGui.QApplication(sys.argv)
+    Form = QtGui.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+
+    Form2 = QtGui.QWidget()
+    ui2 = Ui_Form2()
+    ui2.setupUi(Form2)
+
+
+    sys.exit(app.exec_())
