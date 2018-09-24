@@ -104,7 +104,7 @@ class Ui_Form(object):
         getusername =  getpass.getuser()
 
         f = StringIO.StringIO(str(user_readtext))
-        filename = "C:\Users" + '\\' + getusername + '\\' + "Desktop\Domain_Result.txt"
+        filename = "C:\Users" + '\\' + getusername + '\\' + "Desktop\Domain_Result."
 
         f2 = open(filename,"wb")
 
